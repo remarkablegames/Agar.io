@@ -1,0 +1,19 @@
+{
+  "name": "agar.io",
+  "description": "Agar.io clone.",
+  "main": "index.js",
+  "contributors": [
+    "Ben Budnevich <ben.bj32001@gmail.com>",
+    "Mark <mark@remarkablemark.org>"
+  ],
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "latest",
+    "nodemon": "latest",
+    "randomcolor": "latest",
+    "socket.io": "latest"
+  },
+  "license": "MIT"
+}
