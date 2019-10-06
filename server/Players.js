@@ -22,6 +22,7 @@ class Players {
       speed: 3,
       moveX: 0,
       moveY: 0,
+      clientTime: helpers.getRoundedInterval(), 
     };
   }
 

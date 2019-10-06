@@ -19,44 +19,86 @@ let moveY = 0;
 
 const SECOND = 1000;
 const FPS = 60;
+const FPS_INTERVAL = Math.floor(SECOND / FPS);
+const updateQueue = [];
+let clientBatchUpdates = {};
 
-function optimisticUpdate() {
-  clientPlayers = Object.keys(clientPlayers).reduce((acc, playerUid) => {
-    const player = clientPlayers[playerUid];
+const getRoundedInterval = () => {
+  const now = Date.now();
+  return Math.floor(now / FPS_INTERVAL) * FPS_INTERVAL
+};
 
-    const verifiedMoveX = Math.max(-1, Math.min(1, player.moveX));
-    const verifiedMoveY = Math.max(-1, Math.min(1, player.moveY));
-
-    return {
-      ...acc,
-      [playerUid]: { 
-        ...player,
-        x: Math.max(0 , Math.min(clientConfig.maxX, player.x + verifiedMoveX * player.speed)),
-        y: Math.max(0 , Math.min(clientConfig.maxY, player.y + verifiedMoveY * player.speed)),
-        moveX: verifiedMoveX,
-        moveY: verifiedMoveY,
-      }
-    }
-  }, {})
-}
-
+let lastSetTime = Date.now();
 socket.on('join', (serverUid, { config: serverConfig, players: serverPlayers }) => {
   if (serverUid) {
     clientPlayers = serverPlayers;
     clientUid = serverUid;
     clientConfig = serverConfig;
-    setInterval(() => {
-    optimisticUpdate();
-    update();
-    }, SECOND / FPS);
+
+    function runInterval(callback, interval) {
+      var expected = Date.now() + interval;
+      function step() {
+        const drift = Date.now() - expected;
+        callback(drift);
+        expected += interval;
+        setTimeout(step, Math.max(0, interval - drift))
+      }
+      setTimeout(step, interval);
+    }
+
+    setTimeout(() => {
+      // Current Player Loop
+      runInterval((drift) => {
+        const timeWithDelay = Date.now() - 100 - drift; 
+        const roundedTimeWithDelay = Math.floor(timeWithDelay / FPS_INTERVAL) * FPS_INTERVAL;
+        const otherPlayers = clientBatchUpdates[roundedTimeWithDelay];
+
+        window.updateDebugger = {
+          otherPlayers,
+          clientBatchUpdates,
+          roundedInterval: roundedTimeWithDelay,
+        }
+
+        if (otherPlayers && otherPlayers[clientUid]) {
+          delete otherPlayers[clientUid];
+        }
+
+        updatedExistingClientPlayers = Object.keys(clientPlayers).reduce((acc, playerUid) => {
+          // do not update current player
+          if (playerUid === clientUid) {
+            return acc;
+          }
+          const player = clientPlayers[playerUid];
+          const verifiedMoveX = Math.max(-1, Math.min(1, player.moveX));
+          const verifiedMoveY = Math.max(-1, Math.min(1, player.moveY));
+
+          return {
+            ...acc,
+            [playerUid]: {
+              ...player,
+              x: Math.max(0, Math.min(clientConfig.maxX, player.x + verifiedMoveX * player.speed)),
+              y: Math.max(0, Math.min(clientConfig.maxY, player.y + verifiedMoveY * player.speed)),
+            }
+          }
+        }, (clientPlayers || {}));
+
+        clientPlayers = {
+          ...(clientPlayers ? updatedExistingClientPlayers : {}),
+          ...otherPlayers,
+        };
+
+        delete clientBatchUpdates[roundedTimeWithDelay];
+        update();
+      }, FPS_INTERVAL);
+    }, FPS_INTERVAL % Date.now());
   }
 });
 
-socket.on('update', (serverUid, { players: serverPlayers }) => {
-  clientPlayers = {
-    ...serverPlayers,
-  };
-  update();
+socket.on('sync', (serverBatchUpdates = {}) => {
+  clientBatchUpdates = {
+    ...clientBatchUpdates,
+    ...serverBatchUpdates,
+  }
 });
 
 /**
@@ -94,7 +136,7 @@ function drawGrid(xOffset, yOffset) {
   }
 
   context.strokeStyle = 'lightgray';
-  context.stroke(); 
+  context.stroke();
 }
 
 function update() {
@@ -139,7 +181,7 @@ function draw() {
   Object.keys(clientPlayers).forEach(uid => {
     const { x, y, radius, color } = clientPlayers[uid];
 
-    drawCircle({ 
+    drawCircle({
       x: x + xOffset,
       y: y + yOffset,
       radius,
@@ -160,9 +202,21 @@ window.addEventListener('resize', () => {
 });
 
 function updatePlayer() {
+  const player = clientPlayers[clientUid];
+  const verifiedMoveX = Math.max(-1, Math.min(1, moveX));
+  const verifiedMoveY = Math.max(-1, Math.min(1, moveY));
+
+  clientPlayers[clientUid] = {
+    ...player,
+    x: Math.max(0, Math.min(clientConfig.maxX, player.x + verifiedMoveX * player.speed)),
+    y: Math.max(0, Math.min(clientConfig.maxY, player.y + verifiedMoveY * player.speed)),
+    moveX: verifiedMoveX,
+    moveY: verifiedMoveY,
+  }
+
   socket.emit('update', clientUid, {
-    moveX, 
+    moveX,
     moveY,
-    clientTime: Date.now(),
+    clientTime: getRoundedInterval(),
   });
 }
