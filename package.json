@@ -15,5 +15,9 @@
     "randomcolor": "latest",
     "socket.io": "latest"
   },
+  "devDependencies": {
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0"
+  },
   "license": "MIT"
 }
