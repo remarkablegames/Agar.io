@@ -12,7 +12,7 @@ io.on('connection', socket => {
 
   socket.emit('join', uid, {
     players: Players.get(),
-    config 
+    config,
   });
 
   socket.emit('update', uid, Players.get());
@@ -31,8 +31,42 @@ io.on('connection', socket => {
 const SECOND = 1000;
 const FPS = 60;
 
+/**
+ * ```
+ * {
+ *   1000: { ... }
+ *   1016: { ... },
+ *   1032: { ... },
+ * }
+ * ```
+ *
+ * @param {Object} players
+ * @return {Object}
+ */
+const batchPlayerUpdates = players => {
+  return Object.keys(players).reduce((acc, playerUid) => {
+    const player = players[playerUid];
+    return ({
+      ...acc,
+      [player.clientTime]: {
+        ...(acc[player.clientTime] ? acc[player.clientTime] : {}),
+        [playerUid]: player,
+      }
+    })
+  }, {})
+};
+
+let batchUpdates = {};
+
 setInterval(() => {
-  io.sockets.emit('update', null, {
-    players: Players.get(),
-  })
-}, SECOND / FPS);
+  batchUpdates = {
+    ...batchUpdates,
+    ...batchPlayerUpdates(Players.get()),
+  };
+
+}, Math.floor(SECOND / FPS));
+
+setInterval(() => {
+  io.sockets.emit('sync', batchUpdates);
+  batchUpdates = {}; // reset batch updates
+}, 100);
