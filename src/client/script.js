@@ -118,21 +118,24 @@ function drawCircle({ x, y, radius, color }) {
  * @param {number} xOffset
  * @param {number} yOffset
  */
-function drawGrid(xOffset, yOffset) {
-  context.beginPath();
-  const gridHeight = clientConfig.maxY;
-  const gridWidth = clientConfig.maxX;
+function drawGrid(playerX, playerY) {
+  // space between lines
   const dx = 70;
   const dy = 70;
 
-  for (let x = xOffset; x <= gridWidth; x += dx) {
-    context.moveTo(x, yOffset);
-    context.lineTo(x, gridHeight);
+  const gridOffsetX = playerX % dx;
+  const gridOffsetY = playerY % dy;
+
+  context.beginPath();
+
+  for (let x = -gridOffsetX; x <= canvas.width; x += dx) {
+    context.moveTo(x, 0);
+    context.lineTo(x, canvas.height);
   }
 
-  for (let y = yOffset; y <= gridHeight; y += dy) {
-    context.moveTo(xOffset, y);
-    context.lineTo(gridWidth, y);
+  for (let y = -gridOffsetY; y <= canvas.height; y += dy) {
+    context.moveTo(0, y);
+    context.lineTo(canvas.width, y);
   }
 
   context.strokeStyle = 'lightgray';
@@ -176,7 +179,7 @@ function draw() {
   xOffset = (canvas.width / 2) - clientPlayer.x;
   yOffset = (canvas.height / 2) - clientPlayer.y;
 
-  drawGrid(xOffset, yOffset);
+  drawGrid(clientPlayer.x, clientPlayer.y);
 
   Object.keys(clientPlayers).forEach(uid => {
     const { x, y, radius, color } = clientPlayers[uid];
