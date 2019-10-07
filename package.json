@@ -18,7 +18,8 @@
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
-    "husky": "^3.0.8"
+    "husky": "^3.0.8",
+    "typescript": "^3.6.3"
   },
   "license": "MIT"
 }
