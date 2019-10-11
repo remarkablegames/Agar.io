@@ -1,10 +1,8 @@
 {
   "compilerOptions": {
-    "outDir": "./public/",
+    "outDir": "../../build/server/",
     "allowJs": true,
     "target": "es5"
   },
-  "include": [
-    "./src/**/*"
-  ]
+  "include": ["./**/*"]
 }
