@@ -10,23 +10,25 @@
     "build": "run-s build:*",
     "build:client": "tsc -p src/client",
     "build:server": "tsc -p src/server",
+    "clean": "rm -rf build",
+    "dev": "run-p dev:*",
     "dev:client": "yarn build:client --watch",
     "dev:server": "yarn build:server --watch",
-    "server": "nodemon build/server",
-    "start": "run-p dev:* server"
+    "dev:nodemon": "nodemon build/server",
+    "start": "node build/server"
   },
   "dependencies": {
     "express": "latest",
     "nodemon": "latest",
+    "npm-run-all": "^4.1.5",
     "randomcolor": "latest",
-    "socket.io": "latest"
+    "socket.io": "latest",
+    "typescript": "^3.6.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
-    "husky": "^3.0.8",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^3.6.3"
+    "husky": "^3.0.8"
   },
   "license": "MIT"
 }
