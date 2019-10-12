@@ -8,6 +8,7 @@ script:
   - yarn commitlint --from=HEAD~1
   - yarn build
 cache:
+  yarn: true
   directories:
     - node_modules
 notifications:
