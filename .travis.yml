@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - stable
+install:
+  - yarn
+script:
+  # Lint last commit message from history
+  - yarn commitlint --from=HEAD~1
+  - yarn build
+cache:
+  directories:
+    - node_modules
+notifications:
+  email: false
