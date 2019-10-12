@@ -1,5 +1,7 @@
 # Agar.io
 
+[![Build Status](https://travis-ci.org/remarkablegames/Agar.io.svg?branch=master)](https://travis-ci.org/remarkablegames/Agar.io)
+
 An [Agar.io](https://agar.io/) clone. See [demo](https://agarlo.herokuapp.com/).
 
 ## Installation
