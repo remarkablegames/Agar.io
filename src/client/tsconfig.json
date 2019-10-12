@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "../../public/",
+    "outDir": "../../build/client/",
     "allowJs": true,
     "target": "es5"
   },
