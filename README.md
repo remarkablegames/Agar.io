@@ -4,6 +4,11 @@
 
 An [Agar.io](https://agar.io/) clone. See [demo](https://agarlo.herokuapp.com/).
 
+## Prerequisites
+
+- [Node.js](https://nodejs.org/)
+- [Yarn](https://yarnpkg.com/lang/en/docs/install/)
+
 ## Installation
 
 Clone repository:
