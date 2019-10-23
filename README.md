@@ -64,8 +64,8 @@ $ yarn start
 
 ## Contributors
 
-[![Ben Budnevich](https://avatars.githubusercontent.com/u/2293095?s=50)](https://github.com/benox3) &nbsp;&nbsp;
-[![remarkablemark](https://avatars.githubusercontent.com/u/10594555?s=50)](https://github.com/remarkablemark)
+[![Ben Budnevich](https://github.com/benox3.png?size=50)](https://github.com/benox3) &nbsp;&nbsp;
+[![remarkablemark](https://github.com/remarkablemark.png?size=50)](https://github.com/remarkablemark)
 
 ## License
 
