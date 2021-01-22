@@ -1,4 +1,4 @@
-const Server = require('socket.io');
+const { Server } = require('socket.io');
 const Players = require('./Players');
 const config = require('./config');
 const server = require('./server');
@@ -46,14 +46,14 @@ const FPS = 60;
 const batchPlayerUpdates = players => {
   return Object.keys(players).reduce((acc, playerUid) => {
     const player = players[playerUid];
-    return ({
+    return {
       ...acc,
       [player.clientTime]: {
         ...(acc[player.clientTime] ? acc[player.clientTime] : {}),
         [playerUid]: player,
-      }
-    })
-  }, {})
+      },
+    };
+  }, {});
 };
 
 let batchUpdates = {};
@@ -63,7 +63,6 @@ setInterval(() => {
     ...batchUpdates,
     ...batchPlayerUpdates(Players.get()),
   };
-
 }, Math.floor(SECOND / FPS));
 
 setInterval(() => {
