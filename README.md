@@ -14,13 +14,13 @@ An [Agar.io](https://agar.io/) clone. See [demo](https://agarlo.herokuapp.com/).
 Clone repository:
 
 ```sh
-$ git clone https://github.com/remarkablegames/Agar.io.git
+git clone https://github.com/remarkablegames/Agar.io.git
 ```
 
 Install dependencies:
 
 ```sh
-$ yarn
+yarn
 ```
 
 ## Usage
@@ -28,25 +28,25 @@ $ yarn
 Compile files in watch mode and run development server:
 
 ```sh
-$ yarn dev
+yarn dev
 ```
 
 Remove build files:
 
 ```sh
-$ yarn clean
+yarn clean
 ```
 
 Build production files:
 
 ```sh
-$ yarn build
+yarn build
 ```
 
 Run production server:
 
 ```sh
-$ yarn start
+yarn start
 ```
 
 ## Readings
