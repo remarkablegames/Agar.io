@@ -15,7 +15,7 @@
     "dev:client": "yarn build:client --watch",
     "dev:server": "yarn build:server --watch",
     "dev:nodemon": "nodemon build/server",
-    "start": "node build/server"
+    "start": "yarn build && node build/server"
   },
   "dependencies": {
     "express": "latest",
