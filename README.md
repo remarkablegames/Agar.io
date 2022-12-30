@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/remarkablegames/Agar.io.svg?branch=master)](https://travis-ci.org/remarkablegames/Agar.io)
 
-An [Agar.io](https://agar.io/) clone. See [demo](https://agarlo.herokuapp.com/).
+[Agar.io](https://agar.io/) clone. See [Replit](https://github.com/remarkablegames/Agar.io) [demo](https://agario.remarkablemark.repl.co/).
 
 ## Prerequisites
 
